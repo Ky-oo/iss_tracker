@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:latlong2/latlong.dart' as latLng;
+import 'package:latlong2/latlong.dart';
 
 import './Client/client.dart';
 
@@ -65,8 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return FlutterMap(
       mapController: MapController(),
       options: MapOptions(
-        initialCenter:
-            latLng.LatLng(double.parse(latitude), double.parse(longitude)),
+        initialCenter: LatLng(double.parse(latitude), double.parse(longitude)),
         initialZoom: 3.2,
       ),
       children: [
@@ -77,8 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
         MarkerLayer(
           markers: [
             Marker(
-                point: latLng.LatLng(
-                    double.parse(latitude), double.parse(longitude)),
+                point: LatLng(double.parse(latitude), double.parse(longitude)),
                 child: const Image(image: AssetImage('assets/iss.png'))),
           ],
         ),
