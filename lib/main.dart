@@ -58,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _loadData();
-    Timer.periodic(Duration(seconds: 1), (Timer t) => _loadData());
+    Timer.periodic(Duration(seconds: 5), (Timer t) => _loadData());
   }
 
   Future<void> _loadData() async {
