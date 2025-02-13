@@ -10,7 +10,7 @@ class MapVisualizer {
       options: MapOptions(
         initialCenter:
             LatLng(issPosition['latitude'] ?? 0, issPosition['longitude'] ?? 0),
-        initialZoom: 3.2,
+        initialZoom: 2,
       ),
       children: [
         TileLayer(
