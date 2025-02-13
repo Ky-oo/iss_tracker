@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'Services/Client/client.dart';
 import 'Services/Map/map.dart';
+import 'Services/Position/locator.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,8 +35,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Map<String, dynamic> data = {};
-  bool isLoading = false;
+  bool isLoading = true;
+  Map<String, double> issPosition = {};
+  Map<String, double> userPosition = {};
 
   @override
   void initState() {
@@ -41,21 +46,25 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _loadData() async {
-    isLoading = true;
-
-    ClientTracker client = ClientTracker();
     try {
-      final fetchedData = await client.fetchData();
-      setState(() {
-        data = fetchedData;
-        isLoading = false;
-      });
+      final fetchedData = await ClientTracker().fetchData();
+      final Position position = await Locator().determinePosition();
+
+      issPosition = {
+        'latitude': double.parse(fetchedData['iss_position']['latitude']),
+        'longitude': double.parse(fetchedData['iss_position']['longitude'])
+      };
+      userPosition = {
+        'latitude': position.latitude,
+        'longitude': position.longitude
+      };
     } catch (e) {
       setState(() {
-        data = {'error': e.toString()};
-        isLoading = false;
+        log("error: $e");
       });
     }
+    isLoading = false;
+    setState(() {});
   }
 
   @override
@@ -73,10 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
             if (isLoading) {
               return CircularProgressIndicator();
             } else {
-              return MapVisualizer().displayMap(
-                data['iss_position']['latitude'].toString(),
-                data['iss_position']['longitude'].toString(),
-              );
+              return MapVisualizer().displayMap(issPosition, userPosition);
             }
           }),
         ));
