@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -38,14 +39,17 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isLoading = true;
   Map<String, double> issPosition = {};
   Map<String, double> userPosition = {};
+  Timer? timer;
 
   @override
   void initState() {
     super.initState();
     _loadData();
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _loadData());
   }
 
   Future<void> _loadData() async {
+    isLoading = false;
     try {
       final fetchedData = await ClientTracker().fetchData();
       final Position position = await Locator().determinePosition();
