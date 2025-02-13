@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:math' as Math;
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -26,6 +27,19 @@ class MyApp extends StatelessWidget {
       home: const MyHomePage(),
     );
   }
+}
+
+double calculateDistance(position1, position2) {
+  var p = 0.017453292519943295;
+  var c = Math.cos;
+  var a = 0.5 -
+      c((position2["latitude"] - position1["latitude"]) * p) / 2 +
+      c(position1["latitude"] * p) *
+          c(position2["latitude"] * p) *
+          (1 - c((position2["longitude"] - position1["longitude"]) * p)) /
+          2;
+  var radiusOfEarth = 6371;
+  return radiusOfEarth * 2 * Math.asin(Math.sqrt(a));
 }
 
 class MyHomePage extends StatefulWidget {
